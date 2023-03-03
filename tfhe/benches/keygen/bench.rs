@@ -1,5 +1,5 @@
+use codspeed_criterion_compat::*;
 use concrete_csprng::seeders::Seeder;
-use criterion::*;
 use tfhe::core_crypto::commons::generators::DeterministicSeeder;
 use tfhe::core_crypto::prelude::{
     allocate_and_generate_new_binary_glwe_secret_key,
