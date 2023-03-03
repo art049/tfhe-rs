@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use codspeed_criterion_compat::{black_box, criterion_group, criterion_main, Criterion};
 use tfhe::boolean::parameters::{BooleanParameters, DEFAULT_PARAMETERS, TFHE_LIB_PARAMETERS};
 use tfhe::core_crypto::prelude::*;
 use tfhe::shortint::keycache::NamedParam;

@@ -1,4 +1,4 @@
-use criterion::{criterion_group, criterion_main, Criterion};
+use codspeed_criterion_compat::{criterion_group, criterion_main, Criterion};
 use tfhe::shortint::keycache::NamedParam;
 use tfhe::shortint::parameters::*;
 use tfhe::shortint::{Ciphertext, Parameters, ServerKey};
