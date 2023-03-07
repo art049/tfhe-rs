@@ -227,7 +227,7 @@ impl BooleanEngine {
                 lwe_ciphertext_opposite_assign(&mut ct_res);
 
                 // Output the result:
-                Ciphertext::Encrypted(ct_res)
+                Ciphertext::Encrypted(ct_res).clone()
             }
         }
     }
