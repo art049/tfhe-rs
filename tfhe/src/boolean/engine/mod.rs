@@ -480,41 +480,8 @@ impl BinaryGatesEngine<&Ciphertext, &Ciphertext, ServerKey> for BooleanEngine {
         ct_right: &Ciphertext,
         server_key: &ServerKey,
     ) -> Ciphertext {
-        match (ct_left, ct_right) {
-            (Ciphertext::Trivial(message_left), Ciphertext::Trivial(message_right)) => {
-                Ciphertext::Trivial(!(*message_left || *message_right))
-            }
-            (Ciphertext::Encrypted(_), Ciphertext::Trivial(message_right)) => {
-                self.nor(ct_left, *message_right, server_key)
-            }
-            (Ciphertext::Trivial(message_left), Ciphertext::Encrypted(_)) => {
-                self.nor(*message_left, ct_right, server_key)
-            }
-            (Ciphertext::Encrypted(ct_left_ct), Ciphertext::Encrypted(ct_right_ct)) => {
-                let mut buffer_lwe_before_pbs = LweCiphertext::new(
-                    0u32,
-                    server_key
-                        .bootstrapping_key
-                        .input_lwe_dimension()
-                        .to_lwe_size(),
-                );
-                let bootstrapper = &mut self.bootstrapper;
-
-                // Compute the linear combination for NOR: - ct_left - ct_right + (0,...,0,-1/8)
-                // ct_left + ct_right
-                lwe_ciphertext_add(&mut buffer_lwe_before_pbs, ct_left_ct, ct_right_ct);
-                // compute the negation
-                lwe_ciphertext_opposite_assign(&mut buffer_lwe_before_pbs);
-                let cst = Plaintext(PLAINTEXT_FALSE);
-                // - 1/8
-                lwe_ciphertext_plaintext_add_assign(&mut buffer_lwe_before_pbs, cst);
-
-                // compute the bootstrap and the key switch
-                bootstrapper
-                    .bootstrap_keyswitch(buffer_lwe_before_pbs, server_key)
-                    .unwrap()
-            }
-        }
+        let or_result = self.or(ct_left, ct_right, server_key);
+        self.not(&or_result)
     }
 
     fn or(
